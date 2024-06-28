@@ -1,4 +1,4 @@
-# Event Class for Arduino
+# Event Class for ESP32
 
 The `Event` class template provides a thread-safe mechanism to manage and observe changes in a variable of type `T` in Arduino projects. It utilizes atomic operations and mutex locking to ensure data integrity across concurrent tasks or threads.
 
