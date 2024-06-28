@@ -1,24 +1,58 @@
-# Event Class for ESP32
+# Event Class Template Documentation
 
-The `Event` class template provides a thread-safe mechanism to manage and observe changes in a variable of type `T` in ESP32 projects. It is designed to ensure data integrity in environments where multiple tasks or threads may access the same variable simultaneously.
+## Summary
+The `Event` class template provides a robust and thread-safe solution for monitoring and managing variable changes in ESP32 projects. With features like operator overloading, mutex locking, and callback mechanisms, it ensures data integrity, thread safety, and seamless integration with ESP32 applications.
 
 ## Features
-
-- **Thread Safety**: Utilizes `std::atomic` for atomic operations, ensuring that read-modify-write operations on the variable are executed atomically, preventing data inconsistencies in concurrent access scenarios.
-  
-- **Mutex Locking**: Uses `std::mutex` to implement locking mechanisms. This ensures that only one thread can modify the variable at a time, preventing data races and ensuring thread-safe access to shared resources.
-
-- **Callback Mechanism**: Provides a callback function that can be set to execute whenever the variable changes. This allows users to react to changes in real-time, such as updating displays or triggering actions based on variable updates.
-
-- **Operator Overloading**: Supports a range of operators (`=`, `+=`, `-=` etc.) to manipulate the encapsulated variable directly. This simplifies code and makes the class intuitive to use in Arduino sketches.
-
-- **ESP32 Compatibility**: Specifically designed for ESP32 microcontroller boards, ensuring compatibility with the Arduino framework and ESP-IDF.
+- **Thread Safety**: Uses `std::atomic` for atomic operations and `std::mutex` for thread safety.
+- **Callback Mechanism**: Allows defining callback functions to respond to variable changes.
+- **Operator Overloading**: Enables various operators for direct variable manipulation.
+- **ESP32 Compatibility**: Designed and tested for compatibility with ESP32 microcontrollers.
 
 ## Usage
+1. **Initialization**: Create an instance of the `Event` class with an initial value.
+   
+2. **Operations**:
+   - Perform operations like incrementing, decrementing, compound assignments, and comparisons.
+   - Set a custom `onChangeCallback` function to execute actions on value changes.
 
-1. **Include the Header File**
+3. **Integration**: Include the `Event` class in your ESP32 Arduino sketch.
 
-   Include the `Event` class header in your ESP32 Arduino sketch or library:
+## Code Snippet Explanation
+- Provides operator overloads for arithmetic and logical operations.
+- Ensures thread safety using mutex locking and atomic operations.
+- Executes the callback function upon variable changes.
+- Supports relational and logical comparison operators for value comparisons.
 
-   ```cpp
-   #include "Event.h"
+## Example Usage
+```cpp
+#include "Event.h"
+
+// Initialize an Event object with an initial value of 50
+Event<int> event(50);
+
+void setup() {
+  Serial.begin(9600);
+
+  // Print the initial value
+  Serial.print("Initial value: ");
+  Serial.println(event.load());
+
+  // Increase the value and print the updated value
+  event += 25;
+  Serial.print("Updated value: ");
+  Serial.println(event.load());
+
+  // Define a callback function to print a message on value change
+  event.setOnChangeCallback([](){
+    Serial.println("Value has changed!");
+  });
+
+  // Modify the value to trigger the callback function
+  event -= 10;
+}
+
+//Output on Serial Monitor
+//Initial value: 50
+//Updated value: 75
+//Value has changed!
