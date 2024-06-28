@@ -28,31 +28,40 @@ The `Event` class template provides a robust and thread-safe solution for monito
 ```cpp
 #include "Event.h"
 
-// Initialize an Event object with an initial value of 50
-Event<int> event(50);
+// Initialize an Event object with an initial value of 50.0 (float)
+Event<float> f(50.0);
+
+// Initialize an Event object with an initial value of 50 (integer)
+Event<int> i(50);
 
 void setup() {
   Serial.begin(9600);
 
-  // Print the initial value
-  Serial.print("Initial value: ");
-  Serial.println(event.load());
+  // Print the initial value of float event
+  Serial.print("Initial float value: ");
+  Serial.println(f);
 
-  // Increase the value and print the updated value
-  event += 25;
-  Serial.print("Updated value: ");
-  Serial.println(event.load());
+  // Print the initial value of integer event
+  Serial.print("Initial integer value: ");
+  Serial.println(i);
 
-  // Define a callback function to print a message on value change
-  event.setOnChangeCallback([](){
-    Serial.println("Value has changed!");
+  // Define a callback function for float event to print a message on value change
+  f.setOnChangeCallback([](){
+    Serial.println("Float value has changed! New value: " + String(f));
   });
 
-  // Modify the value to trigger the callback function
-  event -= 10;
-}
+  // Define a callback function for integer event to print a message on value change
+  i.setOnChangeCallback([](){
+    Serial.println("Integer value has changed! New value: " + String(i));
+  });
 
-//Output on Serial Monitor
-//Initial value: 50
-//Updated value: 75
-//Value has changed!
+  // Increase the float value and print the updated value
+  f += 25.0;
+  Serial.print("Updated float value: ");
+  Serial.println(f);
+
+  // Decrease the integer value and print the updated value
+  i -= 10;
+  Serial.print("Updated integer value: ");
+  Serial.println(i);
+}
