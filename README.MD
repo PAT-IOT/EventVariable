@@ -1,12 +1,12 @@
 # Event Class Template Documentation
 
 ## Summary
-The `Event` class template provides a robust and thread-safe solution for monitoring and managing variable changes in ESP32 projects. With features like operator overloading, mutex locking, and callback mechanisms, it ensures data integrity, thread safety, and seamless integration with ESP32 applications.
+The `Event` class template provides a robust and thread-safe solution for monitoring and managing variable changes in ESP32 projects. It ensures data integrity, thread safety, and seamless integration with ESP32 applications through features like operator overloading, mutex locking, and callback mechanisms.
 
 ## Features
 - **Thread Safety**: Uses `std::atomic` for atomic operations and `std::mutex` for thread safety.
 - **Callback Mechanism**: Allows defining callback functions to respond to variable changes.
-- **Operator Overloading**: Enables various operators for direct variable manipulation.
+- **Operator Overloading**: Enables various operators (`=`, `+=`, `-=` etc.) for direct variable manipulation.
 - **ESP32 Compatibility**: Designed and tested for compatibility with ESP32 microcontrollers.
 
 ## Usage
@@ -35,7 +35,8 @@ Event<float> f(50.0);
 Event<int> i(50);
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
+  delay(1000); // Delay to ensure Serial monitor is ready
 
   // Print the initial value of float event
   Serial.print("Initial float value: ");
@@ -56,12 +57,8 @@ void setup() {
   });
 
   // Increase the float value and print the updated value
-  f += 25.0;
-  Serial.print("Updated float value: ");
-  Serial.println(f);
+  f += 25.0; // Output: "Float value has changed! New value: 75.0"
 
   // Decrease the integer value and print the updated value
-  i -= 10;
-  Serial.print("Updated integer value: ");
-  Serial.println(i);
+  i -= 10; // Output: "Integer value has changed! New value: 40"
 }
